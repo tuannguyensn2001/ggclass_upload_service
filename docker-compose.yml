@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+    app:
+        build:
+            args:
+                user: tuannguyensn2001
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel_example
+        container_name: laravel_example
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            -   ./:/var/www
+        networks:
+            - app
+    nginx:
+        image: nginx:alpine
+        container_name: nginx
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx:/etc/nginx/conf.d
+        networks:
+            - app
+
+
+networks:
+    app:
+        driver: bridge
+
